@@ -1,7 +1,17 @@
 import React from 'react'
 // import './ChooseOptionNav.scss'
 import MenuIcon from '@mui/icons-material/Menu';
+import { useContext } from 'react';
+import { SidebarContext } from '../../Utilities/Context/SidebarContext';
 const ChooseOptionNav = () => {
+    const {setShowSidebar , showSidebar} = useContext(SidebarContext)
+
+    function handleSidebarShow(){
+        setShowSidebar(true)
+        console.log(showSidebar)
+    }
+
+    
     const navOptions = [
         {
             id: "men",
@@ -31,9 +41,9 @@ const ChooseOptionNav = () => {
     ]
     return (
         <div className='flex bg-[#232f3e] text-white p-3' >
-            <div className='flex mr-5' >
+            <div className='flex mr-5' onClick={handleSidebarShow} >
                 <MenuIcon />
-                <h2>All</h2>
+                <h2  >All</h2>
             </div>
             <div className='flex justify-between  w-[75%]' >
                 {
