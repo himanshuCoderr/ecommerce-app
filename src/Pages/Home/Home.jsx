@@ -7,11 +7,11 @@ import ProductsRow from '../../Components/ProductsRow/ProductsRow'
 const Home = () => {
 
   return (
-    <div>
+    <div className='bg-[#e2e6e6]'>
         <Navbar />
         <ChooseOptionNav />
         <Sidebar  />
-        <div>
+        <div  >
           <ProductsRow />
           <ProductsRow />
           <ProductsRow />
