@@ -11,7 +11,7 @@ const ChooseOptionNav = () => {
         console.log(showSidebar)
     }
 
-    
+
     const navOptions = [
         {
             id: "men",
