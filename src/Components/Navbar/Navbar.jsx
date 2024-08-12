@@ -7,7 +7,7 @@ const Navbar = () => {
         <div className='flex justify-around items-center bg-[#121921] text-white p-3 ' >
             <h1 className='text-xl' >Ecommerce App</h1>
             <div className='w-2/5 bg-yellow-700 flex justify-between items-center rounded-md' >
-                <input type="text" name="" id="" className='w-[95%] p-2 text-xl rounded-md' />
+                <input type="text" name="" id="" className='w-[95%] p-2 text-xl rounded-md text-black' />
                 <SearchIcon className='scale-150 ml-2  h-[100%] mr-2' />
             </div>
             <div className='flex  justify-between w-1/5 text-xl' >
