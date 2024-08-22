@@ -4,10 +4,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const ProductsRow = () => {
   return (
-    <div className='w-[85%] m-auto mt-5 p-3 bg-[white]' >
-        <button> <ChevronLeftIcon /></button>
-        <button><ChevronRightIcon /></button>
-        <h2 className='ml-2 mb-2' >Men Collection</h2>
+    <div className=' relative' >
+        <button className='absolute left-0 top-[40%] scale-150 bg-[#f2f0f096] h-20 w-10' ><ChevronLeftIcon /></button>
+        <button className='absolute right-0 top-[40%] scale-150 bg-[#f2f0f096] h-20 w-10' ><ChevronRightIcon /></button>
+        <h2 className='ml-2 mb-3'>Men Collection</h2>
         <div className='flex overflow-x-scroll' >
             <ProductOverview />
             <ProductOverview />

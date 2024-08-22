@@ -2,6 +2,7 @@ import React from 'react'
 // import './Navbar.sass'
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Link } from 'react-router-dom';
 const Navbar = () => {
     return (
         <div className='flex justify-around items-center bg-[#121921] text-white p-3 ' >
@@ -12,7 +13,9 @@ const Navbar = () => {
             </div>
             <div className='flex  justify-between w-1/5 text-xl' >
                 <h2>User Name</h2>
-                <button>Login / Sign Up</button>
+                <Link to="/login">
+                    <button>Login / Sign Up</button>
+                </Link>
                 <ShoppingCartIcon />
             </div>
 

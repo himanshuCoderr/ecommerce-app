@@ -59,7 +59,7 @@ const Sidebar = ({viewSidebar}) => {
     
     ]
   return (
-    <div className='w-[20vw] h-[100vh] absolute top-0 bg-white ' style={showSidebar ? {left:"0px"} : {left : "-20vw"}} >
+    <div className='w-[20vw] h-[100vh] absolute top-0 bg-white z-20 ' style={showSidebar ? {left:"0px"} : {left : "-20vw"}} >
         <div className='flex justify-between bg-[#232f3e] p-3 text-white' > 
             <div className='flex' >
                 <PersonIcon />
