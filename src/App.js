@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Home from './Pages/Home/Home';
+import AdminHome from './Admin/Pages/AdminHome';
 import { useContext } from 'react';
 import Login from './Pages/Login/Login';
 import SignUp from './Pages/SignUp/SignUp';
@@ -18,6 +19,9 @@ const router  = createBrowserRouter([
   },{
     path : "/signup", 
     element : <SignUp />
+  },{
+    path : "/admin", 
+    element : <AdminHome />
   }
   
 ])

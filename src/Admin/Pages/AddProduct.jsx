@@ -23,8 +23,12 @@ function AddProduct({ addProduct }) {
   };
 
   return (
+    <div className='shadow-md border-[1px] mt-5 m-auto p-5' >
     <form onSubmit={handleSubmit}>
-      <input 
+    <div className='mt-4' m-auto p-5  >
+      <label htmlFor="pn" className='font-bold' >Product name</label>
+      <input
+        id="pn"
         type="text" 
         name="name" 
         placeholder="Product Name" 
@@ -32,7 +36,11 @@ function AddProduct({ addProduct }) {
         onChange={handleChange} 
         required 
       />
+      </div>
+      <div className='mt-4'  >
+      <label htmlFor="pn" className='font-bold' >Product Description</label>
       <input 
+        id="pd"
         type="text" 
         name="description" 
         placeholder="Product Description" 
@@ -40,6 +48,9 @@ function AddProduct({ addProduct }) {
         onChange={handleChange} 
         required 
       />
+      </div>
+      <div className='mt-4'  >
+      <label htmlFor="pn" className='font-bold' >Product Price</label>
       <input 
         type="number" 
         name="price" 
@@ -48,6 +59,9 @@ function AddProduct({ addProduct }) {
         onChange={handleChange} 
         required 
       />
+      </div>
+      <div className='mt-4'  >
+      <label htmlFor="pn" className='font-bold' >Product Quantity</label>
       <input 
         type="number" 
         name="quantity" 
@@ -56,6 +70,9 @@ function AddProduct({ addProduct }) {
         onChange={handleChange} 
         required 
       />
+      </div>
+      <div className='mt-4'  >
+      <label htmlFor="pn" className='font-bold' >Date of Mfg</label>
       <input 
         type="date" 
         name="dateOfMfg" 
@@ -63,6 +80,9 @@ function AddProduct({ addProduct }) {
         onChange={handleChange} 
         required 
       />
+      </div>
+      <div className='mt-4'>
+      <label htmlFor="pn" className='font-bold' >Image url</label>
       <input 
         type="text" 
         name="image" 
@@ -70,8 +90,10 @@ function AddProduct({ addProduct }) {
         value={product.image} 
         onChange={handleChange} 
       />
-      <button type="submit">Add Product</button>
+      </div>
+      <button type="submit" className='mt-4 block p-1 rounded-md border-[1px] shadow-md text-sm' >Add Product</button>
     </form>
+    </div>
   );
 }
 
