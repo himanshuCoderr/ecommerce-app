@@ -5,6 +5,8 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { getAuth } from "firebase/auth";
+
+import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCQZJY0jQ3aaKNhPfueT3qBVjHXW9FfHh4",
@@ -22,5 +24,7 @@ const auth = getAuth(app)
 
 const db = getFirestore(app)
 
-export {auth , db}
+const storage = getStorage(app, "gs://ecommerce-pawan.appspot.com");
+
+export {auth , db, storage}
 

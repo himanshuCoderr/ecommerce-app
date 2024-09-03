@@ -71,10 +71,10 @@ const Login = () => {
         <h1 className='text-sm mt-4' >By Continuing you agree to Ecommerce Conditions of use and privacy notice.</h1>
       </div>
       <div>
-        <h3 className='text-center mt-3'>New to Amazon</h3>
+        <h3 className='text-center mt-3'>New to App</h3>
       </div>
       <Link to="/signup" >
-      <button className='w-[25vw] mt-4 m-auto block p-1 rounded-md border-[1px] shadow-md text-sm'  >Create Your Amazon account</button>
+      <button className='w-[25vw] mt-4 m-auto block p-1 rounded-md border-[1px] shadow-md text-sm'  >Create Your Account</button>
       </Link>
     </div>
   )
