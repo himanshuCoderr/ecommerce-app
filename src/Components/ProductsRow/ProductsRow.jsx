@@ -4,6 +4,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { collection, addDoc } from "firebase/firestore"; 
 import { db } from '../../firebase';
+
 const ProductsRow = () => {
 
   async function storeDb(){

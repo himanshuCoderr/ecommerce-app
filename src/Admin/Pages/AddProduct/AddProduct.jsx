@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import AdminNavbar from '../../Components/AdminNavbar/AdminNavbar';
-import { storage } from '../../../firebase'; 
+import { storage } from '../../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db } from '../../../firebase';
+import { collection, addDoc } from "firebase/firestore";
 
 function AddProduct({ addProduct }) {
   const [product, setProduct] = useState({
@@ -10,8 +12,10 @@ function AddProduct({ addProduct }) {
     price: '',
     quantity: '',
     dateOfMfg: '',
-    image: ''
+    productThumbnailUrl: '',
+    productImagesArrUrl: []
   });
+  const [selectedCollection, setSelectedCollection] = useState("")
 
   const [thumbnailImage, setThumbnailImage] = useState(null);
   const [imageOne, setImageOne] = useState(null);
@@ -29,11 +33,49 @@ function AddProduct({ addProduct }) {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
   };
+  const handleSelectCollectionChange = (event) => {
 
-  const handleSubmit = (e) => {
+    setSelectedCollection(event.target.value)
+
+  }
+  async function addToCollectionDb(collectioName) {
+    try {
+      const docRef = await addDoc(collection(db, collectioName), product);
+      console.log("Document written with ID: ", docRef.id);
+      setProduct({
+        name: '',
+        description: '',
+        price: '',
+        quantity: '',
+        dateOfMfg: '',
+        productThumbnailUrl: '',
+        productImagesArrUrl: []
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
-    addProduct(product);
-    setProduct({ name: '', description: '', price: '', quantity: '', dateOfMfg: '', image: '' });
+    console.log(product)
+    console.log(selectedCollection)
+    if (selectedCollection == "Men") {
+      addToCollectionDb("Men")
+    } else if (selectedCollection == "Women") {
+      addToCollectionDb("Women")
+    } else if (selectedCollection == "Kids") {
+      addToCollectionDb("Kids")
+    } else if (selectedCollection == "Pets") {
+      addToCollectionDb("Pets")
+    } else if (selectedCollection == "HomeCare") {
+      addToCollectionDb("HomeCare")
+    } else if (selectedCollection == "AutoMobile") {
+      addToCollectionDb("AutoMobile")
+    } else if (selectedCollection == "MobileCare") {
+      addToCollectionDb("MobileCare")
+    }
+
   };
 
   // Handle file selection with file type validation
@@ -46,54 +88,37 @@ function AddProduct({ addProduct }) {
     }
 
     let ctrlName = event.target.name;
-    if(ctrlName=='thumbnailImage') {
+    if (ctrlName == 'thumbnailImage') {
       if (selectedFile) {
         setThumbnailImage(selectedFile);
-      } 
-    } else if(ctrlName=='image1') {
+      }
+    } else if (ctrlName == 'image1') {
       if (selectedFile) {
         setImageOne(selectedFile);
-      } 
-    } else if(ctrlName=='image2'){
+      }
+    } else if (ctrlName == 'image2') {
       if (selectedFile) {
         setImageTwo(selectedFile);
-      } 
-    } else if(ctrlName=='image3'){
+      }
+    } else if (ctrlName == 'image3') {
       if (selectedFile) {
         setImageThree(selectedFile);
-      } 
-    } else if(ctrlName=='image4'){
+      }
+    } else if (ctrlName == 'image4') {
       if (selectedFile) {
         setImageFour(selectedFile);
-      } 
-    } else if(ctrlName=='image5'){
+      }
+    } else if (ctrlName == 'image5') {
       if (selectedFile) {
         setImageFive(selectedFile);
-      } 
+      }
     }
-};
+  };
 
   // Handle file upload to Firebase Storage
-  const handleUpload = (event) => {
-    let btnName = event.target.name;
-    console.log(btnName);
-    let file = null;
-    if(btnName=='btnThumbnail') {
-      file = thumbnailImage;
-    } else if (btnName=='btnImage1'){
-      file = imageOne;
-    } else if (btnName=='btnImage2'){
-      file = imageTwo;
-    } else if (btnName=='btnImage3'){
-      file = imageThree;
-    } else if (btnName=='btnImage4'){
-      file = imageFour;
-    } else if (btnName=='btnImage5'){
-      file = imageFive;
-    }
-   
-     const storageRef = ref(storage, `uploads/${file.name}`); // Create a reference to the file
-     const uploadTask = uploadBytesResumable(storageRef, file); // Upload file
+  function uploadFile(file) {
+    const storageRef = ref(storage, `uploads/${file.name}`); // Create a reference to the file
+    const uploadTask = uploadBytesResumable(storageRef, file); // Upload file
 
     // Monitor the upload process
     uploadTask.on(
@@ -113,12 +138,47 @@ function AddProduct({ addProduct }) {
         });
       }
     );
+  }
+
+  const handleUpload = (event) => {
+    let btnName = event.target.name;
+    console.log(btnName);
+    let file = null;
+    if (btnName == 'btnThumbnail') {
+      file = thumbnailImage;
+    } else if (btnName == 'btnImage1') {
+      file = imageOne;
+    } else if (btnName == 'btnImage2') {
+      file = imageTwo;
+    } else if (btnName == 'btnImage3') {
+      file = imageThree;
+    } else if (btnName == 'btnImage4') {
+      file = imageFour;
+    } else if (btnName == 'btnImage5') {
+      file = imageFive;
+    }
+
+
   };
 
   return (
     <div className='' >
       <AdminNavbar />
       <form onSubmit={handleSubmit} className='border-black border-2 p-5 m-5'>
+        <div>
+          <label htmlFor="" className='mr-5'>Select Collection</label>
+          <select name="" id="" className='bg-gray-200 text-black p-2' onChange={handleSelectCollectionChange}>
+            <option value="Men">Select Collection</option>
+            <option value="Men">Men Collection</option>
+            <option value="Women">Women Collection</option>
+            <option value="Kids">Kids Collection</option>
+            <option value="Pets">Pets Collection</option>
+            <option value="HomeCare">HomeCare Collection</option>
+            <option value="AutoMobile">AutoMobileCare Collection</option>
+            <option value="MobileCare">MobileCare Collection</option>
+          </select>
+          <p className='text-sm mt-2 text-red-400' >* By Default it will be added into All Products</p>
+        </div>
         <div className='mt-4' m-auto p-5>
           <label htmlFor="pn" className='font-bold mr-2 w-48 inline-block'>Product name</label>
           <input
@@ -183,7 +243,7 @@ function AddProduct({ addProduct }) {
         <div className='mt-4'>
           <label htmlFor="pn" className='font-bold w-48 inline-block'>Product Thumbnail</label>
           <input type="file" name="thumbnailImage" onChange={handleFileChange} />
-          { thumbnailImage && (
+          {thumbnailImage && (
             <div>
               <button className="border-red-800" name="btnThumbnail" type="button" onClick={handleUpload}>Upload File</button>
               <p>File Name: {thumbnailImage.name}</p>
@@ -202,7 +262,7 @@ function AddProduct({ addProduct }) {
         <div className='mt-4'>
           <label htmlFor="pn" className='font-bold w-48 inline-block'>Product Image 1</label>
           <input type="file" name="image1" onChange={handleFileChange} />
-          { imageOne && (
+          {imageOne && (
             <div>
               <button className="border-red-800" name="btnImage1" type="button" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageOne.name}</p>
@@ -221,7 +281,7 @@ function AddProduct({ addProduct }) {
         <div className='mt-4'>
           <label htmlFor="pn" className='font-bold w-48 inline-block'>Product Image 2</label>
           <input type="file" name="image2" onChange={handleFileChange} />
-          { imageTwo && (
+          {imageTwo && (
             <div>
               <button className="border-red-800" name="btnImage2" type="button" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageTwo.name}</p>
@@ -240,7 +300,7 @@ function AddProduct({ addProduct }) {
         <div className='mt-4'>
           <label htmlFor="pn" className='font-bold w-48 inline-block'>Product Image 3</label>
           <input type="file" name="image3" onChange={handleFileChange} />
-          { imageThree && (
+          {imageThree && (
             <div>
               <button className="border-red-800" type="button" name="btnImage3" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageThree.name}</p>
@@ -259,7 +319,7 @@ function AddProduct({ addProduct }) {
         <div className='mt-4'>
           <label htmlFor="pn" className='font-bold w-48 inline-block'>Product Image 4</label>
           <input type="file" name="image4" onChange={handleFileChange} />
-          { imageFour && (
+          {imageFour && (
             <div>
               <button className="border-red-800" type="button" name="btnImage4" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageFour.name}</p>
@@ -278,7 +338,7 @@ function AddProduct({ addProduct }) {
         <div className='mt-4'>
           <label htmlFor="pn" className='font-bold w-48 inline-block'>Product Image 5</label>
           <input type="file" name="image5" onChange={handleFileChange} />
-          { imageFive && (
+          {imageFive && (
             <div>
               <button className="border-red-800" type="button" name="btnImage5" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageFive.name}</p>
