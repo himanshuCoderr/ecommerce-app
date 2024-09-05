@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import Login from './Pages/Login/Login';
 import SignUp from './Pages/SignUp/SignUp';
 import AddProduct from './Admin/Pages/AddProduct/AddProduct';
+import ShowProduct from './Admin/Pages/ShowProduct/ShowProduct';
 import { SidebarContext } from './Utilities/Context/SidebarContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -27,8 +28,11 @@ const router = createBrowserRouter([
   {
     path: "/admin/addProduct",
     element: <AddProduct />
+  },
+  {
+    path: "/admin/showProduct",
+    element: <ShowProduct />
   }
-
 ])
 
 function App() {

@@ -4,7 +4,7 @@ import { storage } from '../../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db } from '../../../firebase';
 import { collection, addDoc } from "firebase/firestore";
-
+import { useRef } from 'react';
 function AddProduct({ addProduct }) {
   const [product, setProduct] = useState({
     name: '',
@@ -15,6 +15,8 @@ function AddProduct({ addProduct }) {
     productThumbnailUrl: '',
     productImagesArrUrl: []
   });
+
+
   const [selectedCollection, setSelectedCollection] = useState("")
 
   const [thumbnailImage, setThumbnailImage] = useState(null);
@@ -23,6 +25,13 @@ function AddProduct({ addProduct }) {
   const [imageThree, setImageThree] = useState(null);
   const [imageFour, setImageFour] = useState(null);
   const [imageFive, setImageFive] = useState(null);
+
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState('');
+  const [imageOneUrl, setImageOneUrl] = useState('');
+  const [imageTwoUrl, setImageTwoUrl] = useState('');
+  const [imageThreeUrl, setImageThreeUrl] = useState('');
+  const [imageFourUrl, setImageFourUrl] = useState('');
+  const [imageFiveUrl, setImageFiveUrl] = useState('');
 
   const [progress, setProgress] = useState(0);
   const [downloadURL, setDownloadURL] = useState("");
@@ -51,6 +60,19 @@ function AddProduct({ addProduct }) {
         productThumbnailUrl: '',
         productImagesArrUrl: []
       });
+      setThumbnailImage(null);
+      setImageOne(null);
+      setImageTwo(null);
+      setImageThree(null);
+      setImageFour(null); 
+      setImageFive(null);
+      setThumbnailImageUrl('');
+      setImageOneUrl('');
+      setImageTwoUrl('');
+      setImageThreeUrl('');
+      setImageFourUrl('');
+      setImageFiveUrl('');
+
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -60,6 +82,12 @@ function AddProduct({ addProduct }) {
     e.preventDefault();
     console.log(product)
     console.log(selectedCollection)
+    if(thumbnailImageUrl=='' || imageOneUrl=='' || imageTwoUrl=='' 
+      || imageThreeUrl=='' || imageFourUrl=='' || imageFiveUrl=='')
+    {
+        alert('Please upload all images before adding the product.');
+        return;
+    }
     if (selectedCollection == "Men") {
       addToCollectionDb("Men")
     } else if (selectedCollection == "Women") {
@@ -75,7 +103,6 @@ function AddProduct({ addProduct }) {
     } else if (selectedCollection == "MobileCare") {
       addToCollectionDb("MobileCare")
     }
-
   };
 
   // Handle file selection with file type validation
@@ -116,7 +143,7 @@ function AddProduct({ addProduct }) {
   };
 
   // Handle file upload to Firebase Storage
-  function uploadFile(file) {
+  function uploadFile(file, imageType) {
     const storageRef = ref(storage, `uploads/${file.name}`); // Create a reference to the file
     const uploadTask = uploadBytesResumable(storageRef, file); // Upload file
 
@@ -133,7 +160,33 @@ function AddProduct({ addProduct }) {
       () => {
         // Get the download URL once the upload is complete
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setDownloadURL(downloadURL);
+          switch (imageType)
+          {
+            case 'thumbnail':
+              product.productThumbnailUrl=downloadURL;
+              setThumbnailImageUrl(downloadURL);
+            break;
+            case 'image1':
+              product.productImagesArrUrl.push(downloadURL)
+              setImageOneUrl(downloadURL);
+            break;
+            case 'image2':
+              product.productImagesArrUrl.push(downloadURL)
+              setImageTwoUrl(downloadURL);
+            break;
+            case 'image3':
+              product.productImagesArrUrl.push(downloadURL)
+              setImageThreeUrl(downloadURL);
+            break;
+            case 'image4':
+              product.productImagesArrUrl.push(downloadURL)
+              setImageFourUrl(downloadURL);
+            break;
+            case 'image5':
+              product.productImagesArrUrl.push(downloadURL)
+              setImageFiveUrl(downloadURL);
+            break;
+          }
           console.log("File available at:", downloadURL);
         });
       }
@@ -146,19 +199,23 @@ function AddProduct({ addProduct }) {
     let file = null;
     if (btnName == 'btnThumbnail') {
       file = thumbnailImage;
+      uploadFile(file,'thumbnail')
     } else if (btnName == 'btnImage1') {
       file = imageOne;
+      uploadFile(file,'image1')
     } else if (btnName == 'btnImage2') {
       file = imageTwo;
+      uploadFile(file,'image2')
     } else if (btnName == 'btnImage3') {
       file = imageThree;
+      uploadFile(file,'image3')
     } else if (btnName == 'btnImage4') {
       file = imageFour;
+      uploadFile(file,'image4')
     } else if (btnName == 'btnImage5') {
       file = imageFive;
+      uploadFile(file,'image5')
     }
-
-
   };
 
   return (
@@ -245,16 +302,16 @@ function AddProduct({ addProduct }) {
           <input type="file" name="thumbnailImage" onChange={handleFileChange} />
           {thumbnailImage && (
             <div>
-              <button className="border-red-800" name="btnThumbnail" type="button" onClick={handleUpload}>Upload File</button>
+              <button className="bg-gray-400 p-1 border-black rounded-md " name="btnThumbnail" type="button" onClick={handleUpload}>Upload File</button>
               <p>File Name: {thumbnailImage.name}</p>
             </div>
           )}
           {progress > 0 && <p>Upload Progress: {Math.round(progress)}%</p>}
-          {downloadURL && (
+          {thumbnailImageUrl && (
             <div>
               <p>File uploaded successfully! You can access it here:</p>
-              <a href={downloadURL} target="_blank" rel="noopener noreferrer">
-                {downloadURL}
+              <a href={thumbnailImageUrl} target="_blank" rel="noopener noreferrer">
+                {thumbnailImageUrl}
               </a>
             </div>
           )}
@@ -264,16 +321,16 @@ function AddProduct({ addProduct }) {
           <input type="file" name="image1" onChange={handleFileChange} />
           {imageOne && (
             <div>
-              <button className="border-red-800" name="btnImage1" type="button" onClick={handleUpload}>Upload File</button>
+              <button className="bg-gray-400 p-1 border-black rounded-md " name="btnImage1" type="button" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageOne.name}</p>
             </div>
           )}
           {progress > 0 && <p>Upload Progress: {Math.round(progress)}%</p>}
-          {downloadURL && (
+          {imageOneUrl && (
             <div>
               <p>File uploaded successfully! You can access it here:</p>
-              <a href={downloadURL} target="_blank" rel="noopener noreferrer">
-                {downloadURL}
+              <a href={imageOneUrl} target="_blank" rel="noopener noreferrer">
+                {imageOneUrl}
               </a>
             </div>
           )}
@@ -283,16 +340,16 @@ function AddProduct({ addProduct }) {
           <input type="file" name="image2" onChange={handleFileChange} />
           {imageTwo && (
             <div>
-              <button className="border-red-800" name="btnImage2" type="button" onClick={handleUpload}>Upload File</button>
+              <button className="bg-gray-400 p-1 border-black rounded-md " name="btnImage2" type="button" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageTwo.name}</p>
             </div>
           )}
           {progress > 0 && <p>Upload Progress: {Math.round(progress)}%</p>}
-          {downloadURL && (
+          {imageTwoUrl && (
             <div>
               <p>File uploaded successfully! You can access it here:</p>
-              <a href={downloadURL} target="_blank" rel="noopener noreferrer">
-                {downloadURL}
+              <a href={imageTwoUrl} target="_blank" rel="noopener noreferrer">
+                {imageTwoUrl}
               </a>
             </div>
           )}
@@ -302,16 +359,16 @@ function AddProduct({ addProduct }) {
           <input type="file" name="image3" onChange={handleFileChange} />
           {imageThree && (
             <div>
-              <button className="border-red-800" type="button" name="btnImage3" onClick={handleUpload}>Upload File</button>
+              <button className="bg-gray-400 p-1 border-black rounded-md " type="button" name="btnImage3" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageThree.name}</p>
             </div>
           )}
           {progress > 0 && <p>Upload Progress: {Math.round(progress)}%</p>}
-          {downloadURL && (
+          {imageThreeUrl && (
             <div>
               <p>File uploaded successfully! You can access it here:</p>
-              <a href={downloadURL} target="_blank" rel="noopener noreferrer">
-                {downloadURL}
+              <a href={imageThreeUrl} target="_blank" rel="noopener noreferrer">
+                {imageThreeUrl}
               </a>
             </div>
           )}
@@ -321,16 +378,16 @@ function AddProduct({ addProduct }) {
           <input type="file" name="image4" onChange={handleFileChange} />
           {imageFour && (
             <div>
-              <button className="border-red-800" type="button" name="btnImage4" onClick={handleUpload}>Upload File</button>
+              <button className="bg-gray-400 p-1 border-black rounded-md " type="button" name="btnImage4" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageFour.name}</p>
             </div>
           )}
           {progress > 0 && <p>Upload Progress: {Math.round(progress)}%</p>}
-          {downloadURL && (
+          {imageFourUrl && (
             <div>
               <p>File uploaded successfully! You can access it here:</p>
-              <a href={downloadURL} target="_blank" rel="noopener noreferrer">
-                {downloadURL}
+              <a href={imageFourUrl} target="_blank" rel="noopener noreferrer">
+                {imageFourUrl}
               </a>
             </div>
           )}
@@ -340,16 +397,16 @@ function AddProduct({ addProduct }) {
           <input type="file" name="image5" onChange={handleFileChange} />
           {imageFive && (
             <div>
-              <button className="border-red-800" type="button" name="btnImage5" onClick={handleUpload}>Upload File</button>
+              <button className="bg-gray-400 p-1 border-black rounded-md " type="button" name="btnImage5" onClick={handleUpload}>Upload File</button>
               <p>File Name: {imageFive.name}</p>
             </div>
           )}
           {progress > 0 && <p>Upload Progress: {Math.round(progress)}%</p>}
-          {downloadURL && (
+          {imageFiveUrl && (
             <div>
               <p>File uploaded successfully! You can access it here:</p>
-              <a href={downloadURL} target="_blank" rel="noopener noreferrer">
-                {downloadURL}
+              <a href={imageFiveUrl} target="_blank" rel="noopener noreferrer">
+                {imageFiveUrl}
               </a>
             </div>
           )}
